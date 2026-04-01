@@ -4,7 +4,7 @@
 # =====================================================
 
 import logging
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
 from .config import DATABASE_URL
@@ -12,7 +12,7 @@ from .config import DATABASE_URL
 logger = logging.getLogger("visualpc.database")
 
 # ---------------------------------------------------------------------------
-# Engine — uses DATABASE_URL loaded from config.py (which reads .env)
+# Engine — pool_pre_ping handles reconnection automatically on each request
 # ---------------------------------------------------------------------------
 
 engine = create_engine(
@@ -24,7 +24,6 @@ engine = create_engine(
 )
 logger.info("Database engine created")
 print("[database] Engine created — connection will be tested on first request")
-```
 
 # ---------------------------------------------------------------------------
 # Session factory
