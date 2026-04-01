@@ -383,6 +383,11 @@ visualpc/
 
 See [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) for guidelines.
 
+## Contributors
+
+- **Kesav Kumar J** — System Architecture, Master Node, Edge Node, Frontend, Backend, Orchestration, Deployment
+- **Rishi Raghavendran** — GPU Worker Node, CUDA Execution, Documentation
+
 ## Security
 
 See [SECURITY.md](SECURITY.md) for our security policy and responsible disclosure process.
