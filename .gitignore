@@ -1,0 +1,113 @@
+# =====================================================
+# VisualPC — .gitignore (Production)
+# =====================================================
+
+# ----- Node.js -----
+node_modules/
+.next/
+out/
+dist/
+build/
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+npm-debug.log*
+yarn-debug.log*
+.pnp/
+.pnp.js
+
+# ----- Python -----
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+.eggs/
+.venv/
+venv/
+env/
+ENV/
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ----- Environment Files (NEVER commit secrets) -----
+.env
+.env.local
+.env.*.local
+.env.production
+.env.staging
+backend/.env
+frontend/.env.local
+frontend/.env.production.local
+
+# ----- Certificates & Keys -----
+*.pem
+*.key
+*.cert
+*.crt
+*.p12
+*.pfx
+*.jks
+certs/*.pem
+!certs/generate_cert.py
+
+# ----- Docker Runtime -----
+docker-compose.override.yml
+*.pid
+
+# ----- Database -----
+*.sqlite
+*.sqlite3
+*.db
+pgdata/
+
+# ----- IDE / Editor -----
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+*~
+.project
+.settings/
+.classpath
+*.sublime-project
+*.sublime-workspace
+
+# ----- OS Junk -----
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+Thumbs.db:encryptable
+desktop.ini
+ehthumbs.db
+$RECYCLE.BIN/
+
+# ----- Test Artifacts -----
+test-results/
+playwright-report/
+.pytest_cache/
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+
+# ----- Logs -----
+*.log
+logs/
+
+# ----- Misc -----
+*.bak
+*.tmp
+*.temp
+.cache/
+
+# ----- Local-only / Non-essential -----
+UNECCESSARY/
+gpu-env/

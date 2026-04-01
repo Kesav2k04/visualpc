@@ -1,0 +1,132 @@
+# =====================================================
+# VisualPC CI/CD — GitHub Actions (Production)
+# =====================================================
+
+name: VisualPC CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  # ----- Frontend: Lint + Build + Test -----
+  build-frontend:
+    name: Frontend Build & Test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18, 20]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Build
+        working-directory: frontend
+        run: npm run build
+        env:
+          NEXT_PUBLIC_API_BASE: http://localhost:8500
+          NEXTAUTH_SECRET: ci-test-secret
+
+      - name: Install Playwright browsers
+        working-directory: frontend
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Playwright tests
+        working-directory: frontend
+        run: npx playwright test --project="Desktop Chrome" --reporter=list
+        env:
+          NEXT_PUBLIC_API_BASE: http://localhost:8500
+          NEXTAUTH_SECRET: ci-test-secret
+
+      - name: Upload Playwright traces on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-traces-node${{ matrix.node-version }}
+          path: frontend/test-results/
+          retention-days: 7
+
+  # ----- Backend: Validate -----
+  build-backend:
+    name: Backend Validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r backend/requirements.txt
+
+      - name: Syntax check
+        run: python -c "
+          import ast, pathlib;
+          files = ['database.py','models.py','auth.py','metrics_api.py','init_db.py'];
+          [ast.parse((pathlib.Path('backend')/f).read_text()) for f in files];
+          print('All files parsed OK')
+          "
+
+      - name: Import check
+        run: python -c "
+          import sys; sys.path.insert(0,'.');
+          from backend.database import Base;
+          from backend.models import Worker, Job, Metric, User;
+          from backend.auth import TokenRequest, TokenResponse;
+          print('All imports OK')
+          "
+
+  # ----- Docker Build -----
+  docker-build:
+    name: Docker Images
+    runs-on: ubuntu-latest
+    needs: [build-frontend, build-backend]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build backend image
+        run: docker build -f Dockerfile.backend -t visualpc-backend .
+
+      - name: Build frontend image
+        run: docker build -f frontend/Dockerfile -t visualpc-frontend frontend/
+
+  # ----- Pipeline Safety -----
+  pipeline-safety:
+    name: Pipeline Files Untouched
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify pipeline files unchanged
+        run: |
+          for f in master.py research/experiments/local_execution.py research/experiments/cloud_only_test.py research/experiments/auto_gpu_experiment_TESTLOAD_FIG4.py; do
+            if [ -f "$f" ] && git diff origin/main -- "$f" 2>/dev/null | grep -q '^[+-]'; then
+              echo "ERROR: $f was modified!"
+              exit 1
+            fi
+          done
+          echo "All pipeline files are untouched ✅"
