@@ -15,24 +15,16 @@ logger = logging.getLogger("visualpc.database")
 # Engine — uses DATABASE_URL loaded from config.py (which reads .env)
 # ---------------------------------------------------------------------------
 
-try:
-    engine = create_engine(
-        DATABASE_URL,
-        pool_pre_ping=True,
-        pool_size=5,
-        max_overflow=10,
-        echo=False,
-    )
-    # Quick connection test at import time
-    with engine.connect() as conn:
-        conn.execute(text("SELECT 1"))
-    logger.info("Database connection established")
-    print("[database] OK — Connected to PostgreSQL")
-except Exception as e:
-    logger.error(f"Database connection failed: {e}")
-    print(f"[database] ERROR — Connection failed: {e}")
-    print(f"[database] DATABASE_URL = {DATABASE_URL[:30]}...")
-    raise
+engine = create_engine(
+    DATABASE_URL,
+    pool_pre_ping=True,
+    pool_size=5,
+    max_overflow=10,
+    echo=False,
+)
+logger.info("Database engine created")
+print("[database] Engine created — connection will be tested on first request")
+```
 
 # ---------------------------------------------------------------------------
 # Session factory
