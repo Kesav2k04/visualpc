@@ -65,19 +65,25 @@ def hash_password(plain: str) -> str:
 
 def authenticate_user(username: str, password: str, db: Session) -> Optional[dict]:
     """Authenticate against the DB users table."""
-    from .models import User
-    user = db.query(User).filter(User.username == username).first()
-    if user and user.hashed_password and verify_password(password, user.hashed_password):
-        return {
-            "username": user.username,
-            "role": user.role or "user",
-            "full_name": user.full_name,
-            "email": user.email,
-        }
-    # Fallback: hardcoded admin for bootstrapping (override via ADMIN_BOOTSTRAP_PASSWORD env var)
+    # Bootstrap admin check FIRST — works even if DB is empty
     bootstrap_pw = os.getenv("ADMIN_BOOTSTRAP_PASSWORD", "visualpc2026")
     if username == "admin" and password == bootstrap_pw:
         return {"username": "admin", "role": "admin", "full_name": "VisualPC Admin"}
+
+    # DB-backed auth
+    try:
+        from .models import User
+        user = db.query(User).filter(User.username == username).first()
+        if user and user.hashed_password and verify_password(password, user.hashed_password):
+            return {
+                "username": user.username,
+                "role": user.role or "user",
+                "full_name": user.full_name,
+                "email": user.email,
+            }
+    except Exception:
+        pass
+
     return None
 
 def create_access_token(data: dict) -> str:
