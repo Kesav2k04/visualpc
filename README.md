@@ -120,6 +120,7 @@ cp .env.example backend/.env
 pip install -r backend/requirements.txt
 
 # Initialize database (creates tables + seeds admin user)
+# Note: Features built-in retry-logic to handle serverless database wake-ups (e.g. Neon/Render)
 python -m backend.migrate
 python -m backend.init_db
 
@@ -201,6 +202,7 @@ docker-compose up --build -d
 | `GPU_WORKER_URL` | `http://localhost:7000/execute-job` | Master | GPU worker endpoint |
 | `MONITOR_API_URL` | `http://localhost:8500` | Master | Monitoring API for callbacks |
 | `NEXT_PUBLIC_API_BASE` | `http://localhost:8500` | Frontend | API base URL |
+| `NEXT_PUBLIC_API_URL` | *(empty)* | Frontend | Alias for API base URL (Vercel compatibility) |
 | `NEXTAUTH_SECRET` | **(required)** | Frontend | NextAuth.js session secret |
 | `NEXTAUTH_URL` | `http://localhost:3000` | Frontend | NextAuth.js base URL |
 | `GOOGLE_CLIENT_ID` | *(empty)* | Frontend | Google OAuth client ID |
@@ -370,9 +372,9 @@ visualpc/
 
 | Component | Recommended Platform | Notes |
 |-----------|---------------------|-------|
-| **Frontend** | [Vercel](https://vercel.com) | Auto-deploy from GitHub, set env vars in dashboard |
-| **Backend API** | [Railway](https://railway.app) / [Render](https://render.com) | Dockerfile support, managed PostgreSQL |
-| **PostgreSQL** | Railway addon / [Supabase](https://supabase.com) | Managed database |
+| **Frontend** | [Vercel](https://vercel.com) | Auto-deploy from GitHub, set `NEXT_PUBLIC_API_URL` |
+| **Backend API** | [Render](https://render.com) / Railway | Dockerfile deployment |
+| **PostgreSQL** | [Neon Serverless](https://neon.tech) | Robust retry-handling for serverless environments |
 | **Master Scheduler** | Same as backend | Deploy as separate service |
 | **GPU Worker** | Local / Cloud GPU | Manual with `register_worker.py` |
 | **Edge Node** | Raspberry Pi | Use `scripts/pi-bootstrap.sh` |
