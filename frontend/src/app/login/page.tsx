@@ -9,6 +9,8 @@ import {
   Zap,
   ArrowRight,
   AlertCircle,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import { login } from "@/services/auth";
 
@@ -16,6 +18,7 @@ export default function LoginPage() {
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -35,11 +38,11 @@ export default function LoginPage() {
   };
 
   const handleGoogleSignIn = () => {
-    signIn("google", { callbackUrl: "/dashboard" });
+    setError("Google OAuth is currently disabled in this environment.");
   };
 
   const handleGitHubSignIn = () => {
-    signIn("github", { callbackUrl: "/dashboard" });
+    setError("GitHub OAuth is currently disabled in this environment.");
   };
 
   /* Input + icon shared styles — using inline to avoid Tailwind v4 issues */
@@ -191,7 +194,7 @@ export default function LoginPage() {
                 </svg>
                 <input
                   id="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
@@ -201,6 +204,26 @@ export default function LoginPage() {
                   onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(99,102,241,0.5)"; e.currentTarget.style.boxShadow = "0 0 0 3px rgba(99,102,241,0.15)"; }}
                   onBlur={(e) => { e.currentTarget.style.borderColor = "rgba(99,102,241,0.15)"; e.currentTarget.style.boxShadow = "none"; }}
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{
+                    position: "absolute",
+                    right: "16px",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    background: "none",
+                    border: "none",
+                    color: "#71728a",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "4px",
+                  }}
+                >
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
               </div>
             </div>
 

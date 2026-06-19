@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { isAuthenticated, getUserRole } from "@/services/auth";
 import { useMetrics } from "@/hooks/useMetrics";
-import { Send, ListTodo, Zap } from "lucide-react";
+import { Send, ListTodo, Zap, Info, Server, Activity } from "lucide-react";
 import Link from "next/link";
 
 import Navbar from "@/components/Navbar";
@@ -79,6 +79,45 @@ export default function DashboardPage() {
         <>
           {/* Health stat cards */}
           <SystemHealth metrics={metrics} jobs={jobs} workers={workers} />
+
+          {/* Professional Empty State Banner */}
+          {metrics.length === 0 && workers.length === 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="relative overflow-hidden rounded-2xl border border-indigo-500/20 bg-indigo-500/5 p-8 sm:p-10"
+            >
+              <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-indigo-500/10 blur-3xl" />
+              <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-cyan-500/10 blur-3xl" />
+              
+              <div className="relative z-10 flex flex-col items-center text-center">
+                <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-500/10 shadow-[0_0_40px_rgba(99,102,241,0.2)]">
+                  <Server className="h-8 w-8 text-indigo-400" />
+                </div>
+                <h2 className="mb-3 text-2xl font-bold tracking-tight text-white sm:text-3xl">
+                  Waiting for Compute Nodes
+                </h2>
+                <p className="mb-8 max-w-2xl text-base text-slate-400 sm:text-lg">
+                  Welcome to the VisualPC Distributed Cluster. The system is currently idle. To visualize real-time telemetry, execute the Edge Gateway and GPU Worker modules in your local environment.
+                </p>
+                
+                <div className="flex flex-wrap justify-center gap-4">
+                  <div className="flex items-center gap-2 rounded-xl border border-slate-700/50 bg-slate-800/50 px-4 py-2 text-sm text-slate-300">
+                    <Activity className="h-4 w-4 text-cyan-400" />
+                    <span>Run Master Node</span>
+                  </div>
+                  <div className="flex items-center gap-2 rounded-xl border border-slate-700/50 bg-slate-800/50 px-4 py-2 text-sm text-slate-300">
+                    <Server className="h-4 w-4 text-indigo-400" />
+                    <span>Connect Edge Gateway</span>
+                  </div>
+                  <div className="flex items-center gap-2 rounded-xl border border-slate-700/50 bg-slate-800/50 px-4 py-2 text-sm text-slate-300">
+                    <Zap className="h-4 w-4 text-green-400" />
+                    <span>Start GPU Worker</span>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
 
           {/* Charts row */}
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">

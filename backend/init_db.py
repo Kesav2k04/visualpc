@@ -7,6 +7,7 @@ import os
 import sys
 import datetime
 import traceback
+import time
 
 from passlib.context import CryptContext
 
@@ -21,15 +22,23 @@ def main():
     print("  VisualPC -- Database Initialization")
     print("=" * 55)
 
-    # 1. Create tables
-    try:
-        print("[init_db] Creating tables...")
-        Base.metadata.create_all(bind=engine)
-        print("[init_db] OK -- Tables created successfully.")
-    except Exception as e:
-        print(f"[init_db] ERROR -- Failed to create tables: {e}")
-        traceback.print_exc()
-        sys.exit(1)
+    # 1. Create tables with robust retry mechanism for Serverless Databases (Railway)
+    max_retries = 5
+    for attempt in range(max_retries):
+        try:
+            print(f"[init_db] Creating tables (Attempt {attempt + 1}/{max_retries})...")
+            Base.metadata.create_all(bind=engine)
+            print("[init_db] OK -- Tables created successfully.")
+            break
+        except Exception as e:
+            print(f"[init_db] WARNING -- Failed to create tables: {e}")
+            if attempt < max_retries - 1:
+                print("[init_db] Retrying in 5 seconds (Database might be waking up)...")
+                time.sleep(5)
+            else:
+                print("[init_db] ERROR -- Exhausted all retries.")
+                traceback.print_exc()
+                sys.exit(1)
 
     db = SessionLocal()
     try:
