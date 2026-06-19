@@ -33,6 +33,7 @@ const USER_NAV = [
   { href: "/submit-job", label: "Submit Job", icon: Send },
   { href: "/jobs", label: "My Jobs", icon: ListTodo },
   { href: "/dashboard", label: "Overview", icon: LayoutDashboard },
+  { href: "/architecture", label: "Architecture", icon: Network },
 ];
 
 export default function Sidebar() {
