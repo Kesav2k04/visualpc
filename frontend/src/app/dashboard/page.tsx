@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { isAuthenticated, getUserRole } from "@/services/auth";
 import { useMetrics } from "@/hooks/useMetrics";
-import { Send, ListTodo, Zap, Info, Server, Activity, Rocket, X, Cpu } from "lucide-react";
+import { Send, ListTodo, Zap, Info, Server, Activity, Rocket, X, Cpu, Network, Database, CheckCircle } from "lucide-react";
 import Link from "next/link";
 
 import Navbar from "@/components/Navbar";
@@ -274,64 +274,128 @@ function UserLanding({ jobs, refresh }: UserLandingProps) {
         </motion.div>
       </div>
 
-      {/* New User Onboarding Assist */}
+      {/* New User Onboarding Assist - Ultra Realistic Architecture Flow */}
       {showAssist && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-md">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0a0a14]/80 p-4 sm:p-6 backdrop-blur-xl transition-all">
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            initial={{ opacity: 0, scale: 0.95, y: 30 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ type: "spring", bounce: 0.4, duration: 0.8 }}
-            className="relative w-full max-w-lg overflow-hidden rounded-2xl border border-indigo-500/30 bg-slate-900 shadow-2xl"
+            transition={{ type: "spring", bounce: 0.3, duration: 0.8 }}
+            className="relative w-full max-w-4xl overflow-hidden rounded-[24px] border border-indigo-500/20 bg-[#12131f] shadow-2xl"
           >
-            {/* Background Glows */}
-            <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-indigo-500/20 blur-3xl" />
-            <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-cyan-500/20 blur-3xl" />
+            {/* Ultra Premium Background Glows */}
+            <div className="absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full bg-indigo-600/10 blur-[100px] pointer-events-none" />
+            <div className="absolute -bottom-40 -right-40 h-[500px] w-[500px] rounded-full bg-cyan-600/10 blur-[100px] pointer-events-none" />
             
             <button 
               onClick={dismissAssist}
-              className="absolute right-4 top-4 z-10 rounded-full bg-slate-800/50 p-1.5 text-slate-400 transition hover:bg-slate-700 hover:text-white"
+              className="absolute right-6 top-6 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-white/5 text-slate-400 transition-all hover:bg-white/10 hover:text-white"
             >
               <X size={18} />
             </button>
 
-            <div className="relative z-10 p-8">
-              <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-500/20 shadow-[0_0_30px_rgba(99,102,241,0.3)]">
-                <Rocket className="h-8 w-8 text-indigo-400" />
-              </div>
-              
-              <h2 className="mb-2 text-2xl font-bold tracking-tight text-white">Get Started with VisualPC</h2>
-              <p className="mb-6 text-sm leading-relaxed text-slate-400">
-                You are now connected to the distributed GPU cloud. Here is a quick guide to kick off your first compute workload:
-              </p>
-
-              <div className="mb-8 flex flex-col gap-4">
-                <div className="flex items-start gap-4 rounded-xl border border-slate-800 bg-slate-800/40 p-4">
-                  <div className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-cyan-500/20 text-cyan-400">
-                    <Send size={14} />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-slate-200">Submit a Job</h3>
-                    <p className="text-xs text-slate-400">Click the submit button to queue matrix multiplication workloads.</p>
-                  </div>
+            <div className="relative z-10 flex flex-col md:flex-row">
+              {/* Left Side: The Visual Architecture Flow */}
+              <div className="flex-1 border-b border-indigo-500/10 bg-black/20 p-8 md:border-b-0 md:border-r">
+                <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3 py-1 text-xs font-semibold text-indigo-400 uppercase tracking-widest">
+                  <Network size={14} />
+                  System Architecture
                 </div>
                 
-                <div className="flex items-start gap-4 rounded-xl border border-slate-800 bg-slate-800/40 p-4">
-                  <div className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-indigo-500/20 text-indigo-400">
-                    <Cpu size={14} />
+                <h2 className="mb-8 text-2xl font-bold tracking-tight text-white sm:text-3xl">
+                  Distributed Workload Flow
+                </h2>
+
+                {/* Flow Diagram UI */}
+                <div className="relative flex flex-col gap-6">
+                  {/* Step 1 */}
+                  <div className="relative flex items-center gap-4">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-400 shadow-[0_0_15px_rgba(99,102,241,0.2)]">
+                      <Send size={20} />
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-bold text-slate-200">1. Dashboard (You are here)</h3>
+                      <p className="text-xs text-slate-400">User submits a matrix computation job.</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-semibold text-slate-200">Execution</h3>
-                    <p className="text-xs text-slate-400">The master scheduler will dispatch your job to the nearest available GPU node.</p>
+                  
+                  {/* Connecting Line */}
+                  <div className="absolute left-6 top-12 h-6 w-px bg-gradient-to-b from-indigo-500/50 to-cyan-500/50" />
+
+                  {/* Step 2 */}
+                  <div className="relative flex items-center gap-4">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-cyan-500/30 bg-cyan-500/10 text-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.2)]">
+                      <Server size={20} />
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-bold text-slate-200">2. Master Scheduler</h3>
+                      <p className="text-xs text-slate-400">Routes the job via Priority Queue (FastAPI).</p>
+                    </div>
+                  </div>
+
+                  {/* Connecting Line */}
+                  <div className="absolute left-6 top-[120px] h-6 w-px bg-gradient-to-b from-cyan-500/50 to-emerald-500/50" />
+
+                  {/* Step 3 */}
+                  <div className="relative flex items-center gap-4">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+                      <Cpu size={20} />
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-bold text-slate-200">3. GPU Worker / Edge Node</h3>
+                      <p className="text-xs text-slate-400">Executes CUDA workload and returns telemetry.</p>
+                    </div>
+                  </div>
+                  
+                  {/* Connecting Line */}
+                  <div className="absolute left-6 top-[192px] h-6 w-px bg-gradient-to-b from-emerald-500/50 to-indigo-500/50" />
+
+                  {/* Step 4 */}
+                  <div className="relative flex items-center gap-4">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-indigo-500/30 bg-indigo-500/10 text-indigo-400 shadow-[0_0_15px_rgba(99,102,241,0.2)]">
+                      <Database size={20} />
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-bold text-slate-200">4. Live Telemetry</h3>
+                      <p className="text-xs text-slate-400">SSE streams live metrics back to this dashboard.</p>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <button 
-                onClick={dismissAssist}
-                className="w-full rounded-xl bg-indigo-500 py-3.5 text-sm font-semibold text-white transition hover:bg-indigo-600 hover:shadow-[0_0_20px_rgba(99,102,241,0.4)]"
-              >
-                Got it, Let's Go!
-              </button>
+              {/* Right Side: Actionable State */}
+              <div className="flex flex-1 flex-col justify-between p-8">
+                <div>
+                  <div className="mb-6 flex items-center gap-3 rounded-lg border border-amber-500/20 bg-amber-500/10 p-3 text-amber-400">
+                    <Info size={18} className="shrink-0" />
+                    <span className="text-sm font-medium">Sandbox Mode Active</span>
+                  </div>
+                  
+                  <h3 className="mb-4 text-xl font-bold text-white">How to use this right now?</h3>
+                  <p className="mb-6 text-sm leading-relaxed text-slate-400">
+                    The dashboard is fully functional, but it is currently waiting for <b>Edge Nodes</b> or <b>GPU Workers</b> to connect via your local backend instance.
+                  </p>
+
+                  <ul className="mb-8 space-y-3">
+                    <li className="flex items-start gap-3 text-sm text-slate-300">
+                      <CheckCircle size={16} className="mt-0.5 shrink-0 text-emerald-400" />
+                      <span>You can submit dummy jobs; they will remain queued.</span>
+                    </li>
+                    <li className="flex items-start gap-3 text-sm text-slate-300">
+                      <CheckCircle size={16} className="mt-0.5 shrink-0 text-emerald-400" />
+                      <span>To see real-time graphs, run <code className="rounded bg-black/30 px-1.5 py-0.5 text-xs text-indigo-300">master.py</code> and <code className="rounded bg-black/30 px-1.5 py-0.5 text-xs text-indigo-300">register_worker.py</code> locally.</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <button 
+                  onClick={dismissAssist}
+                  className="group flex w-full items-center justify-center gap-2 rounded-xl bg-white px-6 py-4 text-sm font-bold text-black transition-all hover:bg-indigo-50 hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] active:scale-[0.98]"
+                >
+                  Understood, enter dashboard
+                  <Rocket size={16} className="transition-transform group-hover:translate-x-1" />
+                </button>
+              </div>
             </div>
           </motion.div>
         </div>
