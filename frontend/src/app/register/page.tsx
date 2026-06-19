@@ -28,7 +28,7 @@ export default function RegisterPage() {
 
     setLoading(true);
     try {
-      const API = process.env.NEXT_PUBLIC_API_BASE || "http://localhost:8500";
+      const API = process.env.NEXT_PUBLIC_API_BASE || process.env.NEXT_PUBLIC_API_URL || "http://localhost:8500";
       const res = await fetch(`${API}/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
