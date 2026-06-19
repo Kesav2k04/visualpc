@@ -70,7 +70,7 @@ test.describe("Sidebar Navigation", () => {
     await page.goto("/workers");
     await page.waitForTimeout(2000);
     // Should see the Workers heading
-    await expect(page.getByText("Workers")).toBeVisible();
+    await expect(page.getByRole("heading", { name: /workers/i, level: 1 })).toBeVisible();
   });
 
   test("should navigate to Jobs page", async ({ page }) => {

@@ -38,18 +38,36 @@ jobs:
         working-directory: frontend
         run: npm run build
         env:
-          NEXT_PUBLIC_API_BASE: http://localhost:8500
+          NEXT_PUBLIC_API_BASE: http://127.0.0.1:8500
+          NEXT_PUBLIC_API_URL: http://127.0.0.1:8500
           NEXTAUTH_SECRET: ci-test-secret
 
       - name: Install Playwright browsers
         working-directory: frontend
         run: npx playwright install --with-deps chromium
 
+      - name: Setup Python for Backend
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install backend dependencies
+        run: pip install -r backend/requirements.txt
+
+      - name: Start backend API (for NextAuth)
+        run: |
+          export DATABASE_URL="sqlite:///./ci_test.db"
+          python -m backend.init_db
+          python -m uvicorn backend.metrics_api:app --host 127.0.0.1 --port 8500 &
+          sleep 5
+
       - name: Run Playwright tests
         working-directory: frontend
         run: npx playwright test --project="Desktop" --reporter=list
         env:
-          NEXT_PUBLIC_API_BASE: http://localhost:8500
+          NEXT_PUBLIC_API_BASE: http://127.0.0.1:8500
+          NEXT_PUBLIC_API_URL: http://127.0.0.1:8500
+          NEXTAUTH_URL: http://127.0.0.1:3000
           NEXTAUTH_SECRET: ci-test-secret
 
       - name: Upload Playwright traces on failure
