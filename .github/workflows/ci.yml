@@ -47,7 +47,7 @@ jobs:
 
       - name: Run Playwright tests
         working-directory: frontend
-        run: npx playwright test --project="Desktop Chrome" --reporter=list
+        run: npx playwright test --project="Desktop" --reporter=list
         env:
           NEXT_PUBLIC_API_BASE: http://localhost:8500
           NEXTAUTH_SECRET: ci-test-secret
