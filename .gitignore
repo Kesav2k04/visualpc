@@ -111,3 +111,10 @@ logs/
 # ----- Local-only / Non-essential -----
 UNECCESSARY/
 gpu-env/
+
+# ----- Paper Extraction & Temp Artifacts -----
+/June 19_images_fix/
+/pdf_images/
+/pdf_content.txt
+/changes.txt
+/generate_all_figures.py

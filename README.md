@@ -6,7 +6,7 @@
 
 Distributed compute workload orchestration, real-time monitoring, and GPU job scheduling across cloud, edge, and local execution planes.
 
-[![CI](https://github.com/your-org/visualpc/actions/workflows/ci.yml/badge.svg)](https://github.com/your-org/visualpc/actions)
+[![CI](https://github.com/Kesav2k04/visualpc/actions/workflows/ci.yml/badge.svg)](https://github.com/Kesav2k04/visualpc/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11+-3776AB.svg)](https://www.python.org/)
 [![Next.js 16](https://img.shields.io/badge/Next.js-16-000000.svg)](https://nextjs.org/)
@@ -105,7 +105,7 @@ VisualPC is a **distributed GPU compute platform** that orchestrates workloads a
 ### 1. Clone & Configure
 
 ```bash
-git clone https://github.com/your-org/visualpc.git
+git clone https://github.com/Kesav2k04/visualpc.git
 cd visualpc
 
 # Create environment file
