@@ -4,7 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Zap, ArrowRight, AlertCircle } from "lucide-react";
+import { Zap, ArrowRight, AlertCircle, CheckCircle2 } from "lucide-react";
+import { login } from "@/services/auth";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -23,6 +24,13 @@ export default function RegisterPage() {
 
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match.");
+      return;
+    }
+
+    // Professional standard password validation
+    const passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passRegex.test(formData.password)) {
+      setError("Password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a number, and a special character.");
       return;
     }
 
@@ -45,7 +53,14 @@ export default function RegisterPage() {
         throw new Error(msg);
       }
 
-      router.push("/login?registered=1");
+      // Auto-login for a seamless professional UX
+      try {
+        await login({ username: formData.username, password: formData.password });
+        router.push("/dashboard");
+      } catch {
+        // Fallback if auto-login fails for some reason
+        router.push("/login?registered=1");
+      }
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Registration failed. Try again.";
       setError(message);

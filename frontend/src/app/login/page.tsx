@@ -38,11 +38,11 @@ export default function LoginPage() {
   };
 
   const handleGoogleSignIn = () => {
-    setError("Google OAuth is currently disabled in this environment.");
+    signIn("google", { callbackUrl: "/dashboard" });
   };
 
   const handleGitHubSignIn = () => {
-    setError("GitHub OAuth is currently disabled in this environment.");
+    signIn("github", { callbackUrl: "/dashboard" });
   };
 
   /* Input + icon shared styles — using inline to avoid Tailwind v4 issues */
