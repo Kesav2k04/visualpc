@@ -7,12 +7,13 @@
 Distributed compute workload orchestration, real-time monitoring, and GPU job scheduling across cloud, edge, and local execution planes.
 
 [![CI](https://github.com/Kesav2k04/visualpc/actions/workflows/ci.yml/badge.svg)](https://github.com/Kesav2k04/visualpc/actions)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20866268.svg)](https://doi.org/10.5281/zenodo.20866268)
+[![Vercel](https://img.shields.io/badge/Vercel-Deployed-000000.svg?style=flat&logo=vercel&logoColor=white)](https://visualpc.vercel.app)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11+-3776AB.svg)](https://www.python.org/)
 [![Next.js 16](https://img.shields.io/badge/Next.js-16-000000.svg)](https://nextjs.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688.svg)](https://fastapi.tiangolo.com/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-336791.svg)](https://www.postgresql.org/)
-
 </div>
 
 ---
