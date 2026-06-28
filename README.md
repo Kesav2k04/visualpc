@@ -46,29 +46,24 @@ VisualPC is a **distributed GPU compute platform** that orchestrates workloads a
 
 ```mermaid
 flowchart LR
-    %% Professional Minimalist Styling (GitHub Safe)
+    %% Safe Styling
     classDef ui fill:#0f172a,stroke:#334155,stroke-width:1px,color:#f8fafc
     classDef core fill:#1e1b4b,stroke:#4f46e5,stroke-width:1px,color:#f8fafc
     classDef db fill:#022c22,stroke:#10b981,stroke-width:1px,color:#f8fafc
     classDef compute fill:#4c0519,stroke:#e11d48,stroke-width:1px,color:#f8fafc
-    
-    %% Link Styling
-    linkStyle default stroke:#64748b,stroke-width:1px
-    linkStyle 6 stroke:#94a3b8,stroke-width:1px,stroke-dasharray: 4 4
-    linkStyle 7 stroke:#94a3b8,stroke-width:1px,stroke-dasharray: 4 4
 
-    %% Nodes (Strictly no inline HTML styles)
+    %% Nodes using \n for newlines instead of HTML
     Client(["👤 Web Browser"]):::ui
-    Dashboard["🖥️ Next.js Dashboard<br/>React 18 · Port 3000"]:::ui
+    Dashboard["🖥️ Next.js Dashboard\nReact 18 · Port 3000"]:::ui
     
-    API["⚙️ Monitoring API<br/>FastAPI · Port 8500"]:::core
-    DB[("🗄️ PostgreSQL 15<br/>Neon Serverless")]:::db
-    Scheduler["🧠 Master Scheduler<br/>FastAPI · Port 9000"]:::core
+    API["⚙️ Monitoring API\nFastAPI · Port 8500"]:::core
+    DB[("🗄️ PostgreSQL 15\nNeon Serverless")]:::db
+    Scheduler["🧠 Master Scheduler\nFastAPI · Port 9000"]:::core
     
-    GPU["🚀 GPU Worker<br/>PyTorch · CUDA"]:::compute
-    Edge["📟 Edge Gateway<br/>Raspberry Pi 4B"]:::compute
+    GPU["🚀 GPU Worker\nPyTorch · CUDA"]:::compute
+    Edge["📟 Edge Gateway\nRaspberry Pi 4B"]:::compute
 
-    %% Linear Flow (Left to Right)
+    %% Linear Flow
     Client -->|"HTTPS"| Dashboard
     Dashboard -->|"REST + SSE"| API
     API -->|"SQLAlchemy"| DB
@@ -77,7 +72,7 @@ flowchart LR
     Scheduler -->|"HTTP Dispatch"| GPU
     Scheduler -->|"HTTP Dispatch"| Edge
     
-    %% Asynchronous Callbacks (Routes underneath cleanly)
+    %% Asynchronous Callbacks
     GPU -.->|"Async Metrics"| API
     Edge -.->|"Telemetry"| API
 ```
