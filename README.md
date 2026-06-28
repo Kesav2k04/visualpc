@@ -45,45 +45,40 @@ VisualPC is a **distributed GPU compute platform** that orchestrates workloads a
 ## Architecture
 
 ```mermaid
-graph TD
-    %% Global Styling
-    classDef client fill:#2563eb,stroke:#1d4ed8,stroke-width:2px,color:#fff,rx:8px,ry:8px;
-    classDef frontend fill:#0f172a,stroke:#3b82f6,stroke-width:2px,color:#fff,rx:8px,ry:8px;
-    classDef backend fill:#1e1b4b,stroke:#8b5cf6,stroke-width:2px,color:#fff,rx:8px,ry:8px;
-    classDef worker fill:#064e3b,stroke:#10b981,stroke-width:2px,color:#fff,rx:8px,ry:8px;
-    classDef edge fill:#450a0a,stroke:#ef4444,stroke-width:2px,color:#fff,rx:8px,ry:8px;
-    classDef db fill:#171717,stroke:#f59e0b,stroke-width:2px,color:#fff,rx:8px,ry:8px;
-
-    Client["🌐 User / Browser<br/><span style='font-size:12px;color:#cbd5e1'>Web Client</span>"]:::client
+flowchart LR
+    %% Professional Minimalist Styling
+    classDef ui fill:#0f172a,stroke:#334155,stroke-width:1px,color:#f8fafc,rx:4px
+    classDef core fill:#1e1b4b,stroke:#4f46e5,stroke-width:1px,color:#f8fafc,rx:4px
+    classDef db fill:#022c22,stroke:#10b981,stroke-width:1px,color:#f8fafc,rx:4px
+    classDef compute fill:#4c0519,stroke:#e11d48,stroke-width:1px,color:#f8fafc,rx:4px
     
-    subgraph UI ["Presentation Layer"]
-        Dashboard["🖥️ Next.js Dashboard (:3000)<br/><span style='font-size:12px;color:#94a3b8'>React 18 · Tailwind · Recharts</span>"]:::frontend
-    end
+    %% Link Styling (Untangles the lines)
+    linkStyle default stroke:#64748b,stroke-width:1.5px
+    linkStyle 6,7 stroke:#94a3b8,stroke-width:1px,stroke-dasharray: 4 4
 
-    subgraph Core ["Control Plane"]
-        API["⚙️ Monitoring API (:8500)<br/><span style='font-size:12px;color:#94a3b8'>FastAPI · Auth · SSE · Metrics</span>"]:::backend
-        Scheduler["🧠 Master Scheduler (:9000)<br/><span style='font-size:12px;color:#94a3b8'>Priority Queue · Dispatch · Discovery</span>"]:::backend
-        DB[("🗄️ PostgreSQL 15<br/><span style='font-size:12px;color:#94a3b8'>Neon Serverless</span>")]:::db
-    end
+    %% Nodes
+    Client(["👤 Web Browser"]):::ui
+    Dashboard["🖥️ Next.js Dashboard<br/><span style='font-size:11px;color:#94a3b8'>React 18 · Port 3000</span>"]:::ui
+    
+    API["⚙️ Monitoring API<br/><span style='font-size:11px;color:#94a3b8'>FastAPI · Port 8500</span>"]:::core
+    DB[("🗄️ PostgreSQL 15<br/><span style='font-size:11px;color:#94a3b8'>Neon Serverless</span>")]:::db
+    Scheduler["🧠 Master Scheduler<br/><span style='font-size:11px;color:#94a3b8'>FastAPI · Port 9000</span>"]:::core
+    
+    GPU["🚀 GPU Worker<br/><span style='font-size:11px;color:#94a3b8'>PyTorch · CUDA</span>"]:::compute
+    Edge["📟 Edge Gateway<br/><span style='font-size:11px;color:#94a3b8'>Raspberry Pi 4B</span>"]:::compute
 
-    subgraph Mesh ["🔒 Tailscale Mesh VPN (Private Encrypted Network)"]
-        GPU["🚀 GPU Worker (:7000)<br/><span style='font-size:12px;color:#a7f3d0'>PyTorch · CUDA · Heavy Compute</span>"]:::worker
-        Edge["📟 Edge Gateway (:8000)<br/><span style='font-size:12px;color:#fecaca'>Raspberry Pi 4B · IoT Ingestion</span>"]:::edge
-    end
-
-    %% Network Flow
-    Client -- "HTTPS" --> Dashboard
-    Dashboard -- "REST + JWT" --> API
-    Dashboard -. "SSE (Real-time)" .-> API
+    %% Linear Flow (Left to Right)
+    Client -->|"HTTPS"| Dashboard
+    Dashboard -->|"REST + SSE"| API
+    API -->|"SQLAlchemy"| DB
+    API -->|"Forward Job"| Scheduler
     
-    API -- "ORM" --> DB
-    API -- "Forward Job" --> Scheduler
+    Scheduler -->|"HTTP Dispatch"| GPU
+    Scheduler -->|"HTTP Dispatch"| Edge
     
-    Scheduler -- "HTTP Dispatch" --> GPU
-    Scheduler -- "HTTP Dispatch" --> Edge
-    
-    GPU -. "Async Callback" .-> API
-    Edge -. "IoT Telemetry" .-> API
+    %% Asynchronous Callbacks (Routes underneath cleanly)
+    GPU -.->|"Async Metrics"| API
+    Edge -.->|"Telemetry"| API
 ```
 
 ### Component Summary
