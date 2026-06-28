@@ -1,16 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Zap,
   ArrowRight,
   AlertCircle,
   Eye,
   EyeOff,
+  FlaskConical,
+  X,
 } from "lucide-react";
 import { login } from "@/services/auth";
 
@@ -21,6 +23,18 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showDemoBanner, setShowDemoBanner] = useState(false);
+
+  useEffect(() => {
+    const dismissed = sessionStorage.getItem("demoBannerDismissed");
+    if (!dismissed) setShowDemoBanner(true);
+  }, []);
+
+  const dismissBanner = () => {
+    sessionStorage.setItem("demoBannerDismissed", "true");
+    setShowDemoBanner(false);
+  };
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -83,6 +97,76 @@ export default function LoginPage() {
         transition={{ duration: 0.7, ease: "easeOut" }}
         style={{ position: "relative", width: "100%", maxWidth: 420 }}
       >
+        {/* ── Research Demo Notice Banner ── */}
+        <AnimatePresence>
+          {showDemoBanner && (
+            <motion.div
+              key="demo-banner"
+              initial={{ opacity: 0, y: -16, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -10, scale: 0.97 }}
+              transition={{ duration: 0.4 }}
+              style={{
+                marginBottom: 16,
+                borderRadius: 16,
+                border: "1px solid rgba(245,158,11,0.25)",
+                background: "rgba(245,158,11,0.06)",
+                padding: "16px 18px",
+                position: "relative",
+                backdropFilter: "blur(8px)",
+              }}
+            >
+              {/* Dismiss button */}
+              <button
+                onClick={dismissBanner}
+                style={{
+                  position: "absolute", top: 10, right: 10,
+                  background: "none", border: "none", cursor: "pointer",
+                  color: "rgba(245,158,11,0.5)", padding: 4, lineHeight: 1,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  borderRadius: 6,
+                }}
+                aria-label="Dismiss"
+              >
+                <X size={14} />
+              </button>
+
+              {/* Header */}
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+                <FlaskConical size={15} style={{ color: "#f59e0b", flexShrink: 0 }} />
+                <span style={{ fontSize: 12, fontWeight: 700, color: "#f59e0b", letterSpacing: "0.05em", textTransform: "uppercase" }}>
+                  Research Demo
+                </span>
+              </div>
+
+              {/* Body */}
+              <p style={{ fontSize: 12.5, color: "rgba(245,158,11,0.85)", lineHeight: 1.6, margin: 0 }}>
+                This is an <strong>academic research prototype</strong>. The GPU worker runs on a local machine and the Edge node is a home Raspberry Pi — not cloud-deployed. The dashboard may show limited live data.
+              </p>
+
+              {/* Links */}
+              <div style={{ marginTop: 10, display: "flex", gap: 12, flexWrap: "wrap" }}>
+                <a
+                  href="https://github.com/Kesav2k04/visualpc"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ fontSize: 11.5, color: "#f59e0b", fontWeight: 600, textDecoration: "none", display: "flex", alignItems: "center", gap: 4 }}
+                >
+                  View Code & Docs →
+                </a>
+                <a
+                  href="https://github.com/Kesav2k04/visualpc#architecture"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ fontSize: 11.5, color: "rgba(245,158,11,0.65)", fontWeight: 500, textDecoration: "none" }}
+                >
+                  Architecture Overview
+                </a>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Card */}
         <div className="glass-card" style={{ padding: "40px" }}>
           {/* Logo */}
@@ -92,6 +176,7 @@ export default function LoginPage() {
             transition={{ delay: 0.2, duration: 0.4 }}
             style={{ display: "flex", flexDirection: "column", alignItems: "center", marginBottom: 32 }}
           >
+
             <div style={{ marginBottom: 20, display: "flex", height: 64, width: 64, alignItems: "center", justifyContent: "center", borderRadius: 16, background: "rgba(99,102,241,0.12)", boxShadow: "0 8px 32px rgba(99,102,241,0.1)" }}>
               <Zap style={{ width: 32, height: 32, color: "#6366f1" }} />
             </div>
