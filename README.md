@@ -22,6 +22,12 @@ Distributed compute workload orchestration, real-time monitoring, and GPU job sc
 
 VisualPC is a **distributed GPU compute platform** that orchestrates workloads across cloud GPU workers, edge IoT gateways (Raspberry Pi), and local compute nodes. It provides a real-time monitoring dashboard, priority-based job scheduling, and a production-ready monitoring API — all connected through a secure Tailscale mesh VPN.
 
+<div align="center">
+  <img src="docs/images/visualpc-cannon-ant.png" alt="VisualPC Hybrid Concept — Master Node routes heavy jobs to Cloud GPU via cannon, light jobs to Edge Pi via ant" width="100%">
+  <br>
+  <em>Master Node dispatches heavy compute to Cloud GPU and lightweight tasks to Edge nodes.</em>
+</div>
+
 ### Key Features
 
 - 🖥️ **Real-time Dashboard** — Live monitoring of GPU workers, job queues, and performance metrics
