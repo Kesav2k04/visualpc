@@ -97,70 +97,94 @@ export default function LoginPage() {
         transition={{ duration: 0.7, ease: "easeOut" }}
         style={{ position: "relative", width: "100%", maxWidth: 420 }}
       >
-        {/* ── Research Demo Notice Banner ── */}
+        {/* ── Private Cluster Notice ── */}
         <AnimatePresence>
           {showDemoBanner && (
             <motion.div
               key="demo-banner"
-              initial={{ opacity: 0, y: -16, scale: 0.97 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -10, scale: 0.97 }}
-              transition={{ duration: 0.4 }}
+              initial={{ opacity: 0, y: -12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.35, ease: "easeOut" }}
               style={{
                 marginBottom: 16,
-                borderRadius: 16,
-                border: "1px solid rgba(245,158,11,0.25)",
-                background: "rgba(245,158,11,0.06)",
-                padding: "16px 18px",
+                borderRadius: 14,
+                border: "1px solid rgba(34,211,238,0.18)",
+                background: "linear-gradient(135deg, rgba(34,211,238,0.05) 0%, rgba(99,102,241,0.05) 100%)",
+                padding: "14px 16px 14px 18px",
                 position: "relative",
-                backdropFilter: "blur(8px)",
+                backdropFilter: "blur(12px)",
               }}
             >
-              {/* Dismiss button */}
+              {/* Dismiss */}
               <button
                 onClick={dismissBanner}
+                aria-label="Dismiss notice"
                 style={{
                   position: "absolute", top: 10, right: 10,
                   background: "none", border: "none", cursor: "pointer",
-                  color: "rgba(245,158,11,0.5)", padding: 4, lineHeight: 1,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  borderRadius: 6,
+                  color: "rgba(148,163,184,0.4)", padding: 4,
+                  display: "flex", alignItems: "center", borderRadius: 6,
+                  transition: "color 0.2s",
                 }}
-                aria-label="Dismiss"
+                onMouseOver={(e) => { e.currentTarget.style.color = "rgba(148,163,184,0.8)"; }}
+                onMouseOut={(e) => { e.currentTarget.style.color = "rgba(148,163,184,0.4)"; }}
               >
-                <X size={14} />
+                <X size={13} />
               </button>
 
-              {/* Header */}
-              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
-                <FlaskConical size={15} style={{ color: "#f59e0b", flexShrink: 0 }} />
-                <span style={{ fontSize: 12, fontWeight: 700, color: "#f59e0b", letterSpacing: "0.05em", textTransform: "uppercase" }}>
-                  Research Demo
+              {/* Pulsing live dot + label */}
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 7 }}>
+                <span style={{ position: "relative", display: "flex", width: 7, height: 7 }}>
+                  <span style={{
+                    position: "absolute", inset: 0, borderRadius: "50%",
+                    background: "#22d3ee", opacity: 0.7,
+                    animation: "ping 1.4s cubic-bezier(0,0,0.2,1) infinite",
+                  }} />
+                  <span style={{ position: "relative", width: 7, height: 7, borderRadius: "50%", background: "#22d3ee" }} />
+                </span>
+                <span style={{ fontSize: 11, fontWeight: 700, color: "#22d3ee", letterSpacing: "0.07em", textTransform: "uppercase" }}>
+                  Private Research Cluster
                 </span>
               </div>
 
-              {/* Body */}
-              <p style={{ fontSize: 12.5, color: "rgba(245,158,11,0.85)", lineHeight: 1.6, margin: 0 }}>
-                This is an <strong>academic research prototype</strong>. The GPU worker runs on a local machine and the Edge node is a home Raspberry Pi — not cloud-deployed. The dashboard may show limited live data.
+              {/* Body — confident, not apologetic */}
+              <p style={{ fontSize: 12.5, color: "rgba(148,163,184,0.9)", lineHeight: 1.65, margin: 0, paddingRight: 20 }}>
+                VisualPC is connected to a <strong style={{ color: "#e4e4ef" }}>private GPU research cluster</strong>. Compute nodes are activated on-demand for live demonstrations — the dashboard reflects real telemetry when the cluster is online.
               </p>
 
-              {/* Links */}
-              <div style={{ marginTop: 10, display: "flex", gap: 12, flexWrap: "wrap" }}>
+              {/* CTAs */}
+              <div style={{ marginTop: 11, display: "flex", alignItems: "center", gap: 14 }}>
                 <a
                   href="https://github.com/Kesav2k04/visualpc"
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{ fontSize: 11.5, color: "#f59e0b", fontWeight: 600, textDecoration: "none", display: "flex", alignItems: "center", gap: 4 }}
+                  style={{
+                    fontSize: 11.5, color: "#22d3ee", fontWeight: 600,
+                    textDecoration: "none", display: "flex", alignItems: "center", gap: 4,
+                  }}
                 >
-                  View Code & Docs →
+                  View on GitHub
+                  <svg width="10" height="10" viewBox="0 0 12 12" fill="none" style={{ marginTop: 0.5 }}>
+                    <path d="M3.5 8.5L8.5 3.5M8.5 3.5H4.5M8.5 3.5V7.5" stroke="#22d3ee" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
                 </a>
+                <span style={{ width: 1, height: 12, background: "rgba(148,163,184,0.15)" }} />
                 <a
                   href="https://github.com/Kesav2k04/visualpc#architecture"
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{ fontSize: 11.5, color: "rgba(245,158,11,0.65)", fontWeight: 500, textDecoration: "none" }}
+                  style={{ fontSize: 11.5, color: "rgba(148,163,184,0.55)", fontWeight: 500, textDecoration: "none" }}
                 >
-                  Architecture Overview
+                  Architecture
+                </a>
+                <a
+                  href="https://doi.org/10.5281/zenodo.20866268"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ fontSize: 11.5, color: "rgba(148,163,184,0.55)", fontWeight: 500, textDecoration: "none" }}
+                >
+                  DOI Paper
                 </a>
               </div>
             </motion.div>
@@ -345,7 +369,10 @@ export default function LoginPage() {
         </p>
       </motion.div>
 
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+      <style>{`
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes ping { 75%, 100% { transform: scale(2.2); opacity: 0; } }
+      `}</style>
     </div>
   );
 }
