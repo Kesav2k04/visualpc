@@ -46,26 +46,27 @@ VisualPC is a **distributed GPU compute platform** that orchestrates workloads a
 
 ```mermaid
 flowchart LR
-    %% Professional Minimalist Styling
-    classDef ui fill:#0f172a,stroke:#334155,stroke-width:1px,color:#f8fafc,rx:4px
-    classDef core fill:#1e1b4b,stroke:#4f46e5,stroke-width:1px,color:#f8fafc,rx:4px
-    classDef db fill:#022c22,stroke:#10b981,stroke-width:1px,color:#f8fafc,rx:4px
-    classDef compute fill:#4c0519,stroke:#e11d48,stroke-width:1px,color:#f8fafc,rx:4px
+    %% Professional Minimalist Styling (GitHub Safe)
+    classDef ui fill:#0f172a,stroke:#334155,stroke-width:1px,color:#f8fafc
+    classDef core fill:#1e1b4b,stroke:#4f46e5,stroke-width:1px,color:#f8fafc
+    classDef db fill:#022c22,stroke:#10b981,stroke-width:1px,color:#f8fafc
+    classDef compute fill:#4c0519,stroke:#e11d48,stroke-width:1px,color:#f8fafc
     
-    %% Link Styling (Untangles the lines)
-    linkStyle default stroke:#64748b,stroke-width:1.5px
-    linkStyle 6,7 stroke:#94a3b8,stroke-width:1px,stroke-dasharray: 4 4
+    %% Link Styling
+    linkStyle default stroke:#64748b,stroke-width:1px
+    linkStyle 6 stroke:#94a3b8,stroke-width:1px,stroke-dasharray: 4 4
+    linkStyle 7 stroke:#94a3b8,stroke-width:1px,stroke-dasharray: 4 4
 
-    %% Nodes
+    %% Nodes (Strictly no inline HTML styles)
     Client(["👤 Web Browser"]):::ui
-    Dashboard["🖥️ Next.js Dashboard<br/><span style='font-size:11px;color:#94a3b8'>React 18 · Port 3000</span>"]:::ui
+    Dashboard["🖥️ Next.js Dashboard<br/>React 18 · Port 3000"]:::ui
     
-    API["⚙️ Monitoring API<br/><span style='font-size:11px;color:#94a3b8'>FastAPI · Port 8500</span>"]:::core
-    DB[("🗄️ PostgreSQL 15<br/><span style='font-size:11px;color:#94a3b8'>Neon Serverless</span>")]:::db
-    Scheduler["🧠 Master Scheduler<br/><span style='font-size:11px;color:#94a3b8'>FastAPI · Port 9000</span>"]:::core
+    API["⚙️ Monitoring API<br/>FastAPI · Port 8500"]:::core
+    DB[("🗄️ PostgreSQL 15<br/>Neon Serverless")]:::db
+    Scheduler["🧠 Master Scheduler<br/>FastAPI · Port 9000"]:::core
     
-    GPU["🚀 GPU Worker<br/><span style='font-size:11px;color:#94a3b8'>PyTorch · CUDA</span>"]:::compute
-    Edge["📟 Edge Gateway<br/><span style='font-size:11px;color:#94a3b8'>Raspberry Pi 4B</span>"]:::compute
+    GPU["🚀 GPU Worker<br/>PyTorch · CUDA"]:::compute
+    Edge["📟 Edge Gateway<br/>Raspberry Pi 4B"]:::compute
 
     %% Linear Flow (Left to Right)
     Client -->|"HTTPS"| Dashboard
