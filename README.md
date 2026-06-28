@@ -44,41 +44,46 @@ VisualPC is a **distributed GPU compute platform** that orchestrates workloads a
 
 ## Architecture
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                        USER / BROWSER                           │
-└──────────────────────────┬──────────────────────────────────────┘
-                           │ HTTPS
-                           ▼
-┌──────────────────────────────────────────────────────────────────┐
-│               DASHBOARD  (Next.js :3000)                        │
-│   ┌──────────┐ ┌──────────┐ ┌───────────┐ ┌──────────────────┐  │
-│   │ Login    │ │Dashboard │ │Submit Job │ │ Architecture     │  │
-│   │ (OAuth)  │ │ (Charts) │ │ (Forms)   │ │ (Topology View)  │  │
-│   └──────────┘ └──────────┘ └───────────┘ └──────────────────┘  │
-└──────────────────────────┬──────────────────────────────────────┘
-                           │ REST + JWT
-                           ▼
-┌──────────────────────────────────────────────────────────────────┐
-│            MONITORING API  (FastAPI :8500)                       │
-│   Auth · Jobs · Workers · Metrics · SSE · Health                │
-│   ┌──────────────────┐                                          │
-│   │  PostgreSQL DB   │  ← SQLAlchemy ORM                        │
-│   └──────────────────┘                                          │
-└────────────┬─────────────────────────────────────────────────────┘
-             │ Forward jobs
-             ▼
-┌──────────────────────────────────────────────────────────────────┐
-│           MASTER SCHEDULER  (FastAPI :9000)                      │
-│   Priority Queue · Worker Discovery · Dispatch · Callbacks      │
-└────────────┬─────────────────────────────────────────────────────┘
-             │ HTTP dispatch
-             ▼
-┌──────────────────────────┐     ┌─────────────────────────────────┐
-│   GPU WORKER  (:7000)    │     │   EDGE GATEWAY  (Pi :8000)     │
-│   PyTorch · CUDA         │     │   IoT Ingestion · Forwarding   │
-│   Matrix Compute         │     │   Raspberry Pi 4B              │
-└──────────────────────────┘     └─────────────────────────────────┘
+```mermaid
+graph TD
+    %% Global Styling
+    classDef client fill:#2563eb,stroke:#1d4ed8,stroke-width:2px,color:#fff,rx:8px,ry:8px;
+    classDef frontend fill:#0f172a,stroke:#3b82f6,stroke-width:2px,color:#fff,rx:8px,ry:8px;
+    classDef backend fill:#1e1b4b,stroke:#8b5cf6,stroke-width:2px,color:#fff,rx:8px,ry:8px;
+    classDef worker fill:#064e3b,stroke:#10b981,stroke-width:2px,color:#fff,rx:8px,ry:8px;
+    classDef edge fill:#450a0a,stroke:#ef4444,stroke-width:2px,color:#fff,rx:8px,ry:8px;
+    classDef db fill:#171717,stroke:#f59e0b,stroke-width:2px,color:#fff,rx:8px,ry:8px;
+
+    Client["🌐 User / Browser<br/><span style='font-size:12px;color:#cbd5e1'>Web Client</span>"]:::client
+    
+    subgraph UI ["Presentation Layer"]
+        Dashboard["🖥️ Next.js Dashboard (:3000)<br/><span style='font-size:12px;color:#94a3b8'>React 18 · Tailwind · Recharts</span>"]:::frontend
+    end
+
+    subgraph Core ["Control Plane"]
+        API["⚙️ Monitoring API (:8500)<br/><span style='font-size:12px;color:#94a3b8'>FastAPI · Auth · SSE · Metrics</span>"]:::backend
+        Scheduler["🧠 Master Scheduler (:9000)<br/><span style='font-size:12px;color:#94a3b8'>Priority Queue · Dispatch · Discovery</span>"]:::backend
+        DB[("🗄️ PostgreSQL 15<br/><span style='font-size:12px;color:#94a3b8'>Neon Serverless</span>")]:::db
+    end
+
+    subgraph Mesh ["🔒 Tailscale Mesh VPN (Private Encrypted Network)"]
+        GPU["🚀 GPU Worker (:7000)<br/><span style='font-size:12px;color:#a7f3d0'>PyTorch · CUDA · Heavy Compute</span>"]:::worker
+        Edge["📟 Edge Gateway (:8000)<br/><span style='font-size:12px;color:#fecaca'>Raspberry Pi 4B · IoT Ingestion</span>"]:::edge
+    end
+
+    %% Network Flow
+    Client -- "HTTPS" --> Dashboard
+    Dashboard -- "REST + JWT" --> API
+    Dashboard -. "SSE (Real-time)" .-> API
+    
+    API -- "ORM" --> DB
+    API -- "Forward Job" --> Scheduler
+    
+    Scheduler -- "HTTP Dispatch" --> GPU
+    Scheduler -- "HTTP Dispatch" --> Edge
+    
+    GPU -. "Async Callback" .-> API
+    Edge -. "IoT Telemetry" .-> API
 ```
 
 ### Component Summary
