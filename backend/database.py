@@ -15,8 +15,16 @@ logger = logging.getLogger("visualpc.database")
 # Engine — pool_pre_ping handles reconnection automatically on each request
 # ---------------------------------------------------------------------------
 
+# SQLAlchemy 2.1 maps a bare postgresql:// URL to psycopg 3, but this project
+# ships psycopg2-binary, so name the driver explicitly.
+_url = DATABASE_URL
+for _prefix in ("postgres://", "postgresql://"):
+    if _url.startswith(_prefix):
+        _url = "postgresql+psycopg2://" + _url[len(_prefix):]
+        break
+
 engine = create_engine(
-    DATABASE_URL,
+    _url,
     pool_pre_ping=True,
     pool_size=5,
     max_overflow=10,
