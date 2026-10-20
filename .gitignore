@@ -34,6 +34,8 @@ pip-delete-this-directory.txt
 
 # ----- Environment Files (NEVER commit secrets) -----
 .env
+.env.*
+!.env.example
 .env.local
 .env.*.local
 .env.production

@@ -1,0 +1,6 @@
+# Keep local env files and keys out of image build contexts
+**/.env
+**/.env.*
+!**/.env.example
+**/*.pem
+**/*.key

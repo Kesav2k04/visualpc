@@ -172,6 +172,9 @@ Set `ADMIN_BOOTSTRAP_PASSWORD` in `.env` before the first start. The admin accou
 Deploy the full stack with a single command:
 
 ```bash
+# POSTGRES_PASSWORD, VISUALPC_SECRET_KEY and NEXTAUTH_SECRET are required:
+# set them in .env next to docker-compose.yml (see .env.example)
+
 # Build and start all services
 docker-compose up --build -d
 
@@ -187,7 +190,7 @@ docker-compose up --build -d
 ```bash
 # Set GPU worker URL for real deployments
 GPU_WORKER_URL=http://<worker-ip>:7000/execute-job \
-VISUALPC_SECRET_KEY=your-production-secret \
+VISUALPC_SECRET_KEY="$(openssl rand -hex 32)" \
 docker-compose up --build -d
 ```
 
@@ -198,7 +201,7 @@ docker-compose up --build -d
 | Variable | Default | Service | Description |
 |----------|---------|---------|-------------|
 | `DATABASE_URL` | **(required)** | Backend | PostgreSQL connection string |
-| `VISUALPC_SECRET_KEY` | `visualpc-demo-secret` | Backend | JWT signing secret |
+| `VISUALPC_SECRET_KEY` | none (required on Render) | Backend | JWT signing secret; a local run without it uses a random key per process |
 | `FASTAPI_SECRET_KEY` | ← same as above | Backend | Alias for JWT secret |
 | `ADMIN_BOOTSTRAP_PASSWORD` | none (required) | Backend | Password for the `admin` account |
 | `MASTER_NODE_URL` | `http://localhost:9000` | Backend | Master scheduler URL |

@@ -4,6 +4,7 @@
 # =====================================================
 
 import os
+import secrets
 import sys
 from pathlib import Path
 
@@ -46,7 +47,33 @@ if not DATABASE_URL:
 # Optional settings
 # ---------------------------------------------------------------------------
 
-SECRET_KEY: str = os.getenv("FASTAPI_SECRET_KEY", os.getenv("VISUALPC_SECRET_KEY", "visualpc-demo-secret"))
+# Signing keys that were published in this repository as defaults or
+# placeholders. They are public, so they are never used to sign tokens.
+PUBLISHED_SECRET_KEYS = {
+    "visualpc-demo-secret",
+    "visualpc-prod-secret-change-me",
+    "your-secret-key-change-me",
+    "your-production-secret",
+}
+
+SECRET_KEY: str = ""
+for _name in ("FASTAPI_SECRET_KEY", "VISUALPC_SECRET_KEY"):
+    _value = os.getenv(_name, "")
+    if _value in PUBLISHED_SECRET_KEYS:
+        print(f"[config] WARNING: {_name} is a published value; ignoring it.")
+    elif _value and not SECRET_KEY:
+        SECRET_KEY = _value
+
+if not SECRET_KEY:
+    if os.getenv("RENDER"):
+        raise RuntimeError(
+            "VISUALPC_SECRET_KEY is not set to a private value. Set it (or "
+            "FASTAPI_SECRET_KEY) in the Render environment before starting."
+        )
+    # Local runs only: a random key for this process, so tokens end on restart.
+    SECRET_KEY = secrets.token_urlsafe(32)
+    print("[config] WARNING: VISUALPC_SECRET_KEY is not set; using a random key for this process.")
+
 ALLOWED_ORIGINS: str = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000,http://127.0.0.1:3000")
 
 # Master scheduler URL — for forwarding submitted jobs

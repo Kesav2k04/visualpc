@@ -6,6 +6,17 @@ import axios from "axios";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8500";
 
+// Session secrets that were published in this repository as defaults or
+// placeholders. They are public, so they must never sign sessions. When
+// NEXTAUTH_SECRET is unset, NextAuth itself refuses to run in production.
+const PUBLISHED_NEXTAUTH_SECRETS = [
+  "visualpc-nextauth-secret-change-me",
+  "your-nextauth-secret-change-me",
+];
+if (PUBLISHED_NEXTAUTH_SECRETS.includes(process.env.NEXTAUTH_SECRET ?? "")) {
+  throw new Error("NEXTAUTH_SECRET is a published value. Set a new random value.");
+}
+
 const handler = NextAuth({
   providers: [
     // --- Credentials (existing admin/password flow) ---
@@ -88,7 +99,7 @@ const handler = NextAuth({
     maxAge: 60 * 60, // 1 hour
   },
 
-  secret: process.env.NEXTAUTH_SECRET || "visualpc-nextauth-secret-change-me",
+  secret: process.env.NEXTAUTH_SECRET,
 });
 
 export { handler as GET, handler as POST };
