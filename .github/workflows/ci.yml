@@ -54,6 +54,12 @@ jobs:
       - name: Install backend dependencies
         run: pip install -r backend/requirements.txt
 
+      - name: Generate CI admin password
+        run: |
+          PW="$(openssl rand -hex 16)"
+          echo "::add-mask::$PW"
+          echo "ADMIN_BOOTSTRAP_PASSWORD=$PW" >> "$GITHUB_ENV"
+
       - name: Start backend API (for NextAuth)
         run: |
           export DATABASE_URL="sqlite:///./ci_test.db"
