@@ -14,6 +14,8 @@ Distributed compute workload orchestration, real-time monitoring, and GPU job sc
 [![Next.js 16](https://img.shields.io/badge/Next.js-16-000000.svg)](https://nextjs.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688.svg)](https://fastapi.tiangolo.com/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-336791.svg)](https://www.postgresql.org/)
+
+**Paper:** *VisualPC: A Lightweight and Measurable Framework for Experimental Evaluation of Distributed GPU Execution*, ICCET 2026, Chennai (ISBN 978-81-986418-1-6). IEEE Xplore publication expected May 2027.
 </div>
 
 ---
