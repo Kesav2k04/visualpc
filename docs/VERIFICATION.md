@@ -32,7 +32,7 @@ curl -H "Origin: http://localhost:3000" -I http://localhost:8500/health
 
 ## Authentication
 
-- [ ] Credentials login: `admin` / `visualpc2026` → JWT → redirects to `/dashboard`
+- [ ] Credentials login: `admin` / the `ADMIN_BOOTSTRAP_PASSWORD` value → JWT → redirects to `/dashboard`
 - [ ] OAuth buttons: disabled with tooltip when env vars not set
 - [ ] OAuth buttons: enabled when `NEXT_PUBLIC_GOOGLE_CONFIGURED=1` / `NEXT_PUBLIC_GITHUB_CONFIGURED=1`
 - [ ] 401 response auto-clears token and redirects to `/login`

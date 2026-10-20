@@ -9,6 +9,7 @@ Prerequisites:
   - Master running on port 9000 (optional, but recommended)
 """
 
+import os
 import requests
 import uuid
 import time
@@ -18,7 +19,7 @@ API = "http://localhost:8500"
 
 def get_token():
     resp = requests.post(f"{API}/auth/login", json={
-        "username": "admin", "password": "visualpc2026",
+        "username": "admin", "password": os.getenv("ADMIN_BOOTSTRAP_PASSWORD", "visualpc2026"),
     })
     assert resp.status_code == 200
     return resp.json()["access_token"]

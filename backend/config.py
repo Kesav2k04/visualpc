@@ -54,3 +54,7 @@ MASTER_NODE_URL: str = os.getenv("MASTER_NODE_URL", "http://localhost:9000")
 
 # Default port the GPU worker service listens on (for reachability tests)
 GPU_WORKER_PORT: int = int(os.getenv("GPU_WORKER_PORT", "7000"))
+
+# The admin password that used to be the built-in default. It is published in
+# older copies of the README, so it is never accepted as the admin password.
+RETIRED_ADMIN_PASSWORD = "visualpc2026"

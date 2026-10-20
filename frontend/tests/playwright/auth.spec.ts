@@ -5,7 +5,7 @@ import { test, expect } from "@playwright/test";
  * Validates: login flow, sidebar nav, worker cards, responsive breakpoints
  */
 
-const ADMIN_CREDS = { username: "admin", password: "visualpc2026" };
+const ADMIN_CREDS = { username: "admin", password: process.env.ADMIN_BOOTSTRAP_PASSWORD ?? "visualpc2026" };
 
 test.describe("Authentication", () => {
   test("should show login page by default", async ({ page }) => {

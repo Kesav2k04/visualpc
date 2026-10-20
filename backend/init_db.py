@@ -11,6 +11,7 @@ import time
 
 from passlib.context import CryptContext
 
+from .config import RETIRED_ADMIN_PASSWORD
 from .database import engine, Base, SessionLocal
 from .models import Worker, Job, Metric, User   # noqa: F401  — register models
 
@@ -42,26 +43,42 @@ def main():
 
     db = SessionLocal()
     try:
-        # 2. Seed admin user
+        # 2. Seed admin user. The password comes only from ADMIN_BOOTSTRAP_PASSWORD.
+        bootstrap_pw = os.getenv("ADMIN_BOOTSTRAP_PASSWORD", "")
+        if bootstrap_pw == RETIRED_ADMIN_PASSWORD:
+            print("[init_db] WARNING -- ADMIN_BOOTSTRAP_PASSWORD is the retired public default; ignoring it.")
+            bootstrap_pw = ""
         admin = db.query(User).filter(User.username == "admin").first()
         if not admin:
-            admin = User(
-                username="admin",
-                email="admin@visualpc.local",
-                full_name="VisualPC Admin",
-                hashed_password=pwd_context.hash(os.getenv("ADMIN_BOOTSTRAP_PASSWORD", "visualpc2026")),
-                role="admin",
-                provider="credentials",
-            )
-            db.add(admin)
-            db.commit()
-            print("[init_db] OK -- Admin user seeded.")
+            if not bootstrap_pw:
+                print("[init_db] WARNING -- ADMIN_BOOTSTRAP_PASSWORD is not set; admin user not seeded.")
+            else:
+                admin = User(
+                    username="admin",
+                    email="admin@visualpc.local",
+                    full_name="VisualPC Admin",
+                    hashed_password=pwd_context.hash(bootstrap_pw),
+                    role="admin",
+                    provider="credentials",
+                )
+                db.add(admin)
+                db.commit()
+                print("[init_db] OK -- Admin user seeded.")
         else:
-            # Ensure admin has hashed_password and role
+            # Ensure admin has a usable hashed_password and role. An admin still on
+            # the retired default gets the bootstrap password, or is locked until
+            # one is set.
             changed = False
-            if not admin.hashed_password:
-                admin.hashed_password = pwd_context.hash(os.getenv("ADMIN_BOOTSTRAP_PASSWORD", "visualpc2026"))
+            retired = bool(admin.hashed_password) and pwd_context.verify(
+                RETIRED_ADMIN_PASSWORD, admin.hashed_password
+            )
+            if bootstrap_pw and (not admin.hashed_password or retired):
+                admin.hashed_password = pwd_context.hash(bootstrap_pw)
                 changed = True
+            elif retired:
+                admin.hashed_password = None
+                changed = True
+                print("[init_db] WARNING -- admin used the retired default password; login disabled until ADMIN_BOOTSTRAP_PASSWORD is set.")
             if admin.role != "admin":
                 admin.role = "admin"
                 changed = True

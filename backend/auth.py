@@ -4,6 +4,7 @@
 # =====================================================
 
 import datetime
+import hmac
 import os
 from typing import Optional
 
@@ -14,7 +15,7 @@ from passlib.context import CryptContext
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
-from .config import SECRET_KEY
+from .config import RETIRED_ADMIN_PASSWORD, SECRET_KEY
 
 # ---------------------------------------------------------------------------
 # Configuration
@@ -65,9 +66,18 @@ def hash_password(plain: str) -> str:
 
 def authenticate_user(username: str, password: str, db: Session) -> Optional[dict]:
     """Authenticate against the DB users table."""
-    # Bootstrap admin check FIRST — works even if DB is empty
-    bootstrap_pw = os.getenv("ADMIN_BOOTSTRAP_PASSWORD", "visualpc2026")
-    if username == "admin" and password == bootstrap_pw:
+    if hmac.compare_digest(password.encode(), RETIRED_ADMIN_PASSWORD.encode()):
+        return None
+
+    # Bootstrap admin check FIRST, so login works even if the DB is empty.
+    # Only active when ADMIN_BOOTSTRAP_PASSWORD is set; there is no default.
+    bootstrap_pw = os.getenv("ADMIN_BOOTSTRAP_PASSWORD", "")
+    if (
+        bootstrap_pw
+        and bootstrap_pw != RETIRED_ADMIN_PASSWORD
+        and username == "admin"
+        and hmac.compare_digest(password.encode(), bootstrap_pw.encode())
+    ):
         return {"username": "admin", "role": "admin", "full_name": "VisualPC Admin"}
 
     # DB-backed auth

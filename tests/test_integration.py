@@ -7,6 +7,7 @@ Prerequisites:
   - Master running on port 9000: python master.py
 """
 
+import os
 import pytest
 import requests
 import uuid
@@ -16,7 +17,7 @@ MASTER = "http://localhost:9000"
 
 # ── Helpers ──
 
-def get_token(username="admin", password="visualpc2026"):
+def get_token(username="admin", password=os.getenv("ADMIN_BOOTSTRAP_PASSWORD", "visualpc2026")):
     """Authenticate and return JWT token."""
     resp = requests.post(f"{API}/auth/login", json={
         "username": username,
@@ -64,7 +65,7 @@ class TestAuth:
     def test_login_valid(self):
         resp = requests.post(f"{API}/auth/login", json={
             "username": "admin",
-            "password": "visualpc2026",
+            "password": os.getenv("ADMIN_BOOTSTRAP_PASSWORD", "visualpc2026"),
         })
         assert resp.status_code == 200
         data = resp.json()

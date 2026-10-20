@@ -157,13 +157,13 @@ npm run dev
 
 ### 5. Login
 
-Default admin credentials (set via `ADMIN_BOOTSTRAP_PASSWORD` env var):
+Set `ADMIN_BOOTSTRAP_PASSWORD` in `.env` before the first start. The admin account is created with that password:
 
 | Username | Password | Role |
 |----------|----------|------|
-| `admin` | Value of `ADMIN_BOOTSTRAP_PASSWORD` (default: see `.env.example`) | Admin |
+| `admin` | Value of `ADMIN_BOOTSTRAP_PASSWORD` | Admin |
 
-> **⚠️ Production:** Always change `ADMIN_BOOTSTRAP_PASSWORD` to a strong password.
+> **Note:** There is no default password. If `ADMIN_BOOTSTRAP_PASSWORD` is unset, no admin account is created.
 
 ---
 
@@ -200,7 +200,7 @@ docker-compose up --build -d
 | `DATABASE_URL` | **(required)** | Backend | PostgreSQL connection string |
 | `VISUALPC_SECRET_KEY` | `visualpc-demo-secret` | Backend | JWT signing secret |
 | `FASTAPI_SECRET_KEY` | ← same as above | Backend | Alias for JWT secret |
-| `ADMIN_BOOTSTRAP_PASSWORD` | `visualpc2026` | Backend | Default admin password (change in production!) |
+| `ADMIN_BOOTSTRAP_PASSWORD` | none (required) | Backend | Password for the `admin` account |
 | `MASTER_NODE_URL` | `http://localhost:9000` | Backend | Master scheduler URL |
 | `GPU_WORKER_PORT` | `7000` | Backend | Default worker port for reachability |
 | `ALLOWED_ORIGINS` | `http://localhost:3000` | Backend | CORS allowed origins |
