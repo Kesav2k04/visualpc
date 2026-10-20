@@ -38,7 +38,7 @@ const handler = NextAuth({
               name: credentials?.username,
               email: `${credentials?.username}@visualpc.local`,
               accessToken: res.data.access_token,
-              role: "admin",
+              role: res.data.role ?? "user",
             };
           }
           return null;
