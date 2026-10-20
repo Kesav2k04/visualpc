@@ -64,7 +64,8 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=CORS_ORIGINS,
     allow_origin_regex=r"https://.*\.vercel\.app",
-    allow_credentials=True,
+    # Auth uses a bearer header, never cookies, so no origin gets credentials.
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
